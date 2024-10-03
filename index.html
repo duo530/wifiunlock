@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WiFi-UNLOCK</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        h1 { color: #333; }
+        label { margin-right: 10px; }
+    </style>
+</head>
+<body>
+    <h1>WiFi-UNLOCK</h1>
+    <label for="filename">Escolha o nome do arquivo:</label>
+    <input type="text" id="filename" placeholder="exemplo.bat">
+    <button onclick="downloadFile()">Baixar</button>
+
+    <script>
+        function downloadFile() {
+            const filename = document.getElementById('filename').value || 'script.bat';
+            const content = `for /f "tokens=2 delims=:" %i in ('netsh wlan show interfaces ^| findstr "SSID"') do set SSID=%i\nnetsh wlan show profile name="%SSID%" key=clear | findstr "Key Content" > "%USERPROFILE%\\Documents\\keys.txt"`;
+            const blob = new Blob([content], { type: 'text/plain' });
+            const link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+            link.download = filename;
+            link.click();
+        }
+    </script>
+</body>
+</html>
